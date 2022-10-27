@@ -37,7 +37,7 @@ import lombok.Setter;
             name = JpaConst.Q_REP_GET_ALL_MINE,
             query = JpaConst.Q_REP_GET_ALL_MINE_DEF),
     @NamedQuery(
-            name = JpaConst.Q_REP_COUNT_ALL_MINE_DEF,
+            name = JpaConst.Q_REP_COUNT_ALL_MINE,
             query = JpaConst.Q_REP_COUNT_ALL_MINE_DEF)
 })
 
