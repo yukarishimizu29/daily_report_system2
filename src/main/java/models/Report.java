@@ -95,4 +95,18 @@ public class Report {
     @Column(name = JpaConst.REP_COL_UPDATED_AT, nullable = false)
     private LocalDateTime updatedAt;
 
+    /*
+     * 出勤時間
+     */
+
+    @Column(name = JpaConst.REP_COL_BEGIN_AT, nullable = false)
+    private String beginAt;
+
+    /*
+     * 退勤時間
+     */
+
+    @Column(name = JpaConst.REP_COL_FINISH_AT, nullable = false)
+    private String finishAt;
+
 }

@@ -32,6 +32,20 @@ public class ReportValidator {
             errors.add(contentError);
         }
 
+        // 出勤時間のチェック
+        String beginAtError = validateBeginAt(rv.getBeginAt());
+        if (!beginAtError.equals("")) {
+            errors.add(beginAtError);
+        }
+
+        // 退勤時間のチェック
+        String finishAtError = validateFinishAt(rv.getFinishAt());
+        if (!finishAtError.equals("")) {
+            errors.add(finishAtError);
+        }
+
+
+
         return errors;
     }
 
@@ -62,7 +76,35 @@ public class ReportValidator {
         // 入力値がある場合は空文字を返却
         return "";
 
-
     }
+
+    /**
+     * 出勤時間に入力値があるかチェックし、入力値がなければエラーメッセージを返却
+     * @param beginAt 出勤時間
+     * @return エラーメッセージ
+     */
+    private static String validateBeginAt(String beginAt) {
+        if (beginAt == null || beginAt.equals("")) {
+            return MessageConst.E_NOBEGIN.getMessage();
+        }
+
+        // 入力値がある場合は空文字を返却
+        return "";
+    }
+
+    /**
+     * 退勤時間に入力値があるかチェックし、入力値がなければエラーメッセージを返却
+     * @param finishAt 退勤時間
+     * @return エラーメッセージ
+     */
+    private static String validateFinishAt(String finishAt) {
+        if (finishAt == null || finishAt.equals("")) {
+            return MessageConst.E_NOFINISH.getMessage();
+        }
+
+        // 入力値がある場合は空文字を返却
+        return "";
+    }
+
 
 }
