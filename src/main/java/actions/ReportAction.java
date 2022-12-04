@@ -12,6 +12,7 @@ import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.LikeService;
 import services.ReportService;
 
 /**
@@ -21,6 +22,7 @@ import services.ReportService;
 public class ReportAction extends ActionBase {
 
     private ReportService service;
+    private LikeService likeservice;
 
     /**
      * メソッドを実行する
@@ -30,10 +32,12 @@ public class ReportAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new ReportService();
+        likeservice = new LikeService();
 
         // メソッドを実行
         invoke();
         service.close();
+        likeservice.close();
     }
 
     /**
@@ -156,6 +160,14 @@ public class ReportAction extends ActionBase {
 
         // idを条件に日報データを取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        // 指定した従業員が指定したレポートにいいねした件数
+        long like_count = likeservice.getAllMine(ev, rv);
+
+        // 指定したレポートに集まったいいねの件数
+        long like_countAll = likeservice.countAll(rv);
+
 
         if (rv == null) {
             // 該当の日報データが存在しない場合はエラー画面を表示
@@ -163,7 +175,11 @@ public class ReportAction extends ActionBase {
 
         } else {
 
+            putRequestScope(AttributeConst.LIKE_COUNT, like_count);
+            putRequestScope(AttributeConst.LIKE_COUNT_ALL, like_countAll);
+
             putRequestScope(AttributeConst.REPORT, rv); // 取得した日報データ
+            putRequestScope(AttributeConst.TOKEN, getTokenId());
 
             // 詳細画面を表示
             forward(ForwardConst.FW_REP_SHOW);
@@ -190,6 +206,7 @@ public class ReportAction extends ActionBase {
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
         } else {
+
 
             putRequestScope(AttributeConst.TOKEN, getTokenId()); // CSRF対策用トークン
             putRequestScope(AttributeConst.REPORT, rv); // 取得した日報データ

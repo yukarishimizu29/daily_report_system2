@@ -2,10 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="constants.ForwardConst" %>
+<%@ page import="constants.AttributeConst" %>
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="actLike" value="${ForwardConst.ACT_LIKE.getValue()}" />
+<c:set var="commCreate" value="${ForwardConst.CMD_CREATE.getValue()}" />
+<c:set var="commDelete" value="${ForwardConst.CMD_DELETE.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -48,6 +52,26 @@
 
             </tbody>
         </table>
+        <c:choose>
+            <c:when test="${likes_count != 0}">
+            <form method="POST" action="<c:url value='?action=${actLike}&command=${commDelete}' />">
+                <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
+                <input type='image' class="like" src="<c:url value='/image/pinkheart2.png' />" alt="取り消し">
+            </form>
+            </c:when>
+            <c:otherwise>
+            <form method="POST" action="<c:url value='?action=${actLike}&command=${commCreate}' />">
+                <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
+                <input type='image' class="like" src="<c:url value='/image/grayheart2.png' />" alt="いいね" />
+            </form>
+            </c:otherwise>
+        </c:choose>
+
+        <div id=likescount>
+            ${likes_countAll}件のいいね！
+        </div>
 
         <c:if test="${sessionScope.login_employee.id == report.employee.id}">
             <p>

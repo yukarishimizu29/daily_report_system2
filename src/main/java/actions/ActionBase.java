@@ -115,6 +115,18 @@ public abstract class ActionBase {
 
     }
 
+    protected void redirect(ForwardConst action, ForwardConst command, Integer id)
+            throws ServletException, IOException{
+
+        String redirectUrl = request.getContextPath() + "/?action=" + action.getValue();
+        if(command != null) {
+            redirectUrl = redirectUrl + "&command=" + command.getValue() + "&id=" + id;
+        }
+
+        response.sendRedirect(redirectUrl);
+    }
+
+
     /**
      * CSRF対策 token不正の場合はエラー画面を表示
      * @return true: token有効 false: token不正
